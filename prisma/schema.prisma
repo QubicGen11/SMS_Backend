@@ -1,0 +1,54 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Organisation {
+  id              Int      @id @default(autoincrement())
+  name            String   @unique
+  founderName     String?
+  founderPassword String?
+  founderEmail    String?
+  founderPhoneNumber String?
+  schoolEmail     String
+  address         String?
+  city            String?
+  state           String?
+  pincode         String?
+  phoneNumber     String?
+  branches        Branch[]
+  users           User[]
+}
+
+model Branch {
+  id               Int      @id @default(autoincrement())
+  name             String
+  organisationId   Int?
+  organisationName String  
+  founderName      String?  
+  organisation     Organisation @relation(fields: [organisationName], references: [name])
+  city String?
+  state String?
+  pincode String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users            User[]
+}
+
+model User {
+  id                Int      @id @default(autoincrement())
+  name              String?
+  email             String?
+  phoneNumber       String?
+  password          String?
+  role              String?
+  branchId          Int?
+  Branch            Branch? @relation(fields: [branchId], references: [id])
+  organisationName  String
+  branchName String?
+  organisation      Organisation @relation(fields: [organisationName], references: [name])
+}
