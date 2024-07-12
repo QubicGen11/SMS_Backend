@@ -40,12 +40,12 @@ const getAllBranches = async (req, res) => {
 };
 
 const updateBranch = async (req, res) => {
-  const { name } = req.params;
+  const { id } = req.params;
   const { organisationName, founderName, city, state, pincode } = req.body;
   try {
     const existingBranch = await prisma.branch.findFirst({
       where: {
-        name: name
+        id: parseInt(id)
       }
     });
 
@@ -54,7 +54,7 @@ const updateBranch = async (req, res) => {
     }
     const updatedBranch = await prisma.branch.update({
       where: {
-        id: existingBranch.id
+        id: parseInt(id)
       },
       data: {
         organisationName: organisationName,
@@ -72,11 +72,11 @@ const updateBranch = async (req, res) => {
 };
 
 const deleteBranch = async (req, res) => {
-  const { name } = req.params;
+  const { id } = req.params;
   try {
     const existingBranch = await prisma.branch.findFirst({
       where: {
-        name: name
+        id:  id
       }
     });
 
@@ -85,7 +85,7 @@ const deleteBranch = async (req, res) => {
     }
     await prisma.branch.delete({
       where: {
-        id: existingBranch.id
+        id: parseInt(id)
       }
     });
 

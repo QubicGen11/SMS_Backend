@@ -4,24 +4,26 @@ const prisma = new PrismaClient();
 
 const createOrganisation = async (req, res) => {
   const {
-    name,
-    founderName,
-    founderPassword,
-    schoolEmail,
+    organisationName,
+    founderFirstName,
+    founderLastName,
+    mobileNumber,
+    email,
     address,
     city,
     state,
     pincode,
-    phoneNumber,
+    mandal,
+    village,
     founderEmail,
-    founderPhoneNumber
+    founderPassword
   } = req.body;
 
   try {
     // Check if the organisation already exists
-    const findOrganisation = await prisma.organisation.findUnique({
+    const findOrganisation = await prisma.organisation.findFirst({
       where: {
-        name: name
+       organisationName:organisationName
       }
     });
 
@@ -35,17 +37,19 @@ const createOrganisation = async (req, res) => {
     // Create new organisation
     const newOrganisation = await prisma.organisation.create({
       data: {
-        name,
-        founderName,
-        founderPassword: hashedPassword,
-        schoolEmail,
+        organisationName,
+        founderFirstName,
+        founderLastName,
+        mobileNumber,
+        email,
         address,
         city,
         state,
         pincode,
-        phoneNumber,
+        mandal,
+        village,
         founderEmail,
-        founderPhoneNumber
+        founderPassword:hashedPassword
       }
     });
 
@@ -57,7 +61,7 @@ const createOrganisation = async (req, res) => {
           email: newOrganisation.founderEmail,
           phoneNumber: newOrganisation.founderPhoneNumber,
           password: hashedPassword,
-          organisationName: newOrganisation.name,
+          organisationName: newOrganisation.organisationName,
           role: 'Admin' // Assign 'Admin' role to the founder
         }
       });
@@ -87,7 +91,7 @@ const login = async (req, res) => {
       if (!isPasswordValid) {
         return res.status(400).send('Invalid email or password.');
       }
-  
+      
       // Return user details upon successful login
       return res.status(200).json({
         message: 'Login successful',
@@ -99,6 +103,7 @@ const login = async (req, res) => {
           role: user.role
         }
       });
+      console.log('login succesful')
     } catch (error) {
       console.error('Error logging in:', error);
       return res.status(500).send('Internal error: ' + error.message);
