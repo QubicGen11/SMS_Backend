@@ -54,3 +54,113 @@ model User {
   branchName String?
   organisation      Organisation @relation(fields: [organisationName], references: [organisationName])
 }
+model Student{
+  id Int @id @default(autoincrement())
+  loginId Int?
+  firstName String?
+  lastName String?
+  dob DateTime ?
+  gender String ?
+  fatherName String?
+  motherName String?
+  fatherOccupation String?
+  motherOccupation String?
+  email String?
+  mobileNumber Int?
+  religion String?
+  nationality String?
+  address String?
+  userName String?
+  password String?
+  academicDetails academicDetails[]
+}
+model academicDetails{
+  id Int @id @default(autoincrement())
+  class String?
+  modeOfTransportation String?
+  IdentificationMarks String?
+  studyConductCertificate String?
+  transferCertificate String?
+  dateOfJoining DateTime?
+  student Int
+  studentData Student @relation(fields: [student],references: [id])
+}
+
+model Teachers{
+  id Int @id @default(autoincrement())
+  loginId Int?
+  firstName String?
+  lastName String?
+  dob DateTime ?
+  dateOfJoining DateTime?
+  gender String ?
+  fatherName String?
+  motherName String?
+  fatherOccupation String?
+  motherOccupation String?
+  email String?
+  mobileNumber Int?
+  religion String?
+  nationality String?
+  address String?
+  userName String?
+  password String?
+  employeeData employeeInformation[]
+ }
+model nonTeachingStaff{
+  id Int @id @default(autoincrement())
+  loginId Int?
+  firstName String?
+  lastName String?
+  dob DateTime ?
+  dateOfJoining DateTime?
+  gender String ?
+  fatherName String?
+  motherName String?
+  fatherOccupation String?
+  motherOccupation String?
+  email String?
+  mobileNumber Int?
+  religion String?
+  nationality String?
+  address String?
+  userName String?
+  password String?
+  employeeData employeeInformation[]
+}
+model management{
+  id Int @id @default(autoincrement())
+  loginId Int?
+  firstName String?
+  lastName String?
+  dob DateTime ?
+  dateOfJoining DateTime?
+  gender String ?
+  fatherName String?
+  motherName String?
+  fatherOccupation String?
+  motherOccupation String?
+  email String?
+  mobileNumber Int?
+  religion String?
+  nationality String?
+  address String?
+  userName String?
+  password String?
+  employeeData employeeInformation[]
+}
+model employeeInformation{
+  id Int @id @default(autoincrement())
+  subject String?
+  qualification String?
+  experience String?
+  dateOfGraduation DateTime?
+  dateOfJoining DateTime?
+  class  String?
+  teacher Int
+  nonTeachingStaff Int
+  management Int
+  teacherData Teachers @relation(fields: [teacher],references: [id])
+  nonTeachingStaffData nonTeachingStaff @relation(fields: [nonTeachingStaff],references: [id])
+  managementData management @relation(fields: [management],references: [id])
+ }
