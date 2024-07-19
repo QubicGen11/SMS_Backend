@@ -95,4 +95,31 @@ const deleteBranch = async (req, res) => {
   }
 };
 
-module.exports = { createBranch, getAllBranches, updateBranch, deleteBranch };
+const getBranchByOrganisation = async (req, res) => {
+  const orgname = req.params.orgname; 
+
+  try {
+    const isOrg = await prisma.organisation.findUnique({
+      where: { organisationName: orgname }  
+    });
+
+    if (!isOrg) {
+      return res.status(400).send('Organisation does not exist');
+    }
+
+    const getbranchbyorg = await prisma.branch.findMany({
+      where: { organisationName: orgname }  
+    });
+
+    if (!getbranchbyorg.length) {
+      return res.status(400).send('No branches for this organisation');
+    }
+
+    return res.status(200).send(getbranchbyorg);
+  } catch (error) {
+    return res.status(500).send('Internal error: ' + error.message);
+  }
+}
+
+
+module.exports = { createBranch, getAllBranches, updateBranch, deleteBranch,getBranchByOrganisation };
