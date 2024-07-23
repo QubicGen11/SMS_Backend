@@ -1,44 +1,41 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-
 const createBranch = async (req, res) => {
-  const { name, organisationName, founderName, city, state, pincode } = req.body;
+  const { name, organisationName, founderName, mobileNumber, city, state, pincode, mainBranch } = req.body;
+
   try {
+    // Check if the branch already exists by its name
     const existingBranch = await prisma.branch.findFirst({
       where: {
-        name: name
+        name: name,
+        organisationName: organisationName
       }
     });
 
     if (existingBranch) {
-      return res.status(400).send('Branch already exists. Please login instead.');
+      return res.status(400).send('Branch already exists.');
     }
+
+    // Create a new branch
     const newBranch = await prisma.branch.create({
       data: {
         name: name,
         organisationName: organisationName,
         founderName: founderName,
+        mobileNumber: mobileNumber,
         city: city,
         state: state,
-        pincode: pincode
+        pincode: pincode,
+        mainBranch: mainBranch || false // Default to false if not provided
       }
     });
 
-    return res.status(200).send(newBranch);
+    return res.status(201).json(newBranch);
   } catch (error) {
+    console.error('Error creating branch:', error);
     return res.status(500).send('Internal error: ' + error.message);
   }
 };
-
-const getAllBranches = async (req, res) => {
-  try {
-    const allBranches = await prisma.branch.findMany({});
-    return res.status(200).send(allBranches);
-  } catch (error) {
-    return res.status(500).send('Internal error: ' + error.message);
-  }
-};
-
 const updateBranch = async (req, res) => {
   const { id } = req.params;
   const { organisationName, founderName, city, state, pincode } = req.body;
@@ -97,29 +94,22 @@ const deleteBranch = async (req, res) => {
 
 const getBranchByOrganisation = async (req, res) => {
   const orgname = req.params.orgname; 
-
   try {
     const isOrg = await prisma.organisation.findUnique({
       where: { organisationName: orgname }  
     });
-
     if (!isOrg) {
       return res.status(400).send('Organisation does not exist');
     }
-
     const getbranchbyorg = await prisma.branch.findMany({
       where: { organisationName: orgname }  
     });
-
     if (!getbranchbyorg.length) {
       return res.status(400).send('No branches for this organisation');
     }
-
     return res.status(200).send(getbranchbyorg);
   } catch (error) {
     return res.status(500).send('Internal error: ' + error.message);
   }
 }
-
-
-module.exports = { createBranch, getAllBranches, updateBranch, deleteBranch,getBranchByOrganisation };
+module.exports = { createBranch , updateBranch, deleteBranch,getBranchByOrganisation };

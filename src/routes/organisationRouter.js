@@ -9,7 +9,6 @@ const { createOrganisation, login } = require('../controllers/organisationContro
  *   name: organisations
  *   description: Organisation management
  */
-
 /**
  * @swagger
  * /sms/organisations:
@@ -36,7 +35,6 @@ const { createOrganisation, login } = require('../controllers/organisationContro
  *         description: Bad request
  */
 router.post('/organisations', createOrganisation);
-
 /**
  * @swagger
  * /sms/login:
@@ -61,5 +59,4 @@ router.post('/organisations', createOrganisation);
  *         description: Unauthorized
  */
 router.post('/login', login);
-
 module.exports = router;

@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   createBranch,
-  getAllBranches,
-  updateBranch,
+   updateBranch,
   deleteBranch,
   getBranchByOrganisation
 } = require('../controllers/branchController');
@@ -115,7 +114,7 @@ router.delete('/deletebranch/:id', deleteBranch);
  *       '404':
  *         description: No branches found
  */
-router.get('/allbranches', getAllBranches);
+
 
 /**
  * @swagger
